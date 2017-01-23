@@ -24,18 +24,21 @@ namespace BiciEventos.Repositories
         {
             return _context.Events.Single(e => e.Id == id);
         }
+
         public void Add(Event evento)
         {
             _context.Events.Add(evento);
         }
 
-        public void Delete(int id)
+        public Event Delete(int id)
         {
             if (_context.Events.Any(e => e.Id == id))
             {
                 var evento = _context.Events.Single(e => e.Id == id);
                 _context.Events.Remove(evento);
+                return evento;
             }
+            return null;
         }
 
         public void Edit(Event evento)

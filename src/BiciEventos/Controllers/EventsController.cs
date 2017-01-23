@@ -13,7 +13,7 @@ namespace BiciEventos.Controllers
     [Route("api/[controller]")]
     public class EventsController : Controller
     {
-        private UnitOfWork _unitOfWork;
+        private readonly UnitOfWork _unitOfWork;
 
         public EventsController(ApplicationDbContext context)
         {
@@ -23,17 +23,18 @@ namespace BiciEventos.Controllers
         // GET: api/values
         [HttpGet]
         public IEnumerable<Event> Get()
-        {
+        {   
             return _unitOfWork.Events.GetAll();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public Event Get(int id)
+        public ActionResult Get(int id)
         {
             var evento = _unitOfWork.Events.GetEvent(id);
-            _unitOfWork.IsComplete();
-            return evento;
+            if (evento == null)
+                return NotFound();
+            return new ObjectResult(evento);
         }
 
         // POST api/values
@@ -54,10 +55,13 @@ namespace BiciEventos.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _unitOfWork.Events.Delete(id);
+            var removedEvent= _unitOfWork.Events.Delete(id);
+            if (removedEvent == null)
+                return NotFound();
             _unitOfWork.IsComplete();
+            return Ok();
         }
     }
 }
