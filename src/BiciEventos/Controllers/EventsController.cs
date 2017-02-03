@@ -1,33 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BiciEventos.Models;
+﻿using BiciEventos.Models;
 using BiciEventos.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BiciEventos.Controllers
 {
     [Route("api/[controller]")]
     public class EventsController : Controller
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EventsController(ApplicationDbContext context)
+        public EventsController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = new UnitOfWork(context);
+            _unitOfWork = unitOfWork;
         }
 
-        // GET: api/values
         [HttpGet]
-        public IEnumerable<Event> Get()
-        {   
-            return _unitOfWork.Events.GetAll();
+        public ActionResult GetAll()
+        {
+            return new ObjectResult(_unitOfWork.Events.GetAll());
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
@@ -37,31 +30,29 @@ namespace BiciEventos.Controllers
             return new ObjectResult(evento);
         }
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody]Event evento)
         {
             _unitOfWork.Events.Add(evento);
-            _unitOfWork.IsComplete();
+            _unitOfWork.Complete();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Event evento)
+        public void Put([FromBody]Event evento)
         {
             _unitOfWork.Events.Edit(evento);
-            _unitOfWork.IsComplete();
+            _unitOfWork.Complete();
         }
 
-        // DELETE api/values/5
+
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult Delete(int id)
         {
             var removedEvent= _unitOfWork.Events.Delete(id);
             if (removedEvent == null)
                 return NotFound();
-            _unitOfWork.IsComplete();
-            return Ok();
+            _unitOfWork.Complete();
+            return Ok(removedEvent);
         }
     }
 }

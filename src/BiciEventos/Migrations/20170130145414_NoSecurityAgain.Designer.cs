@@ -8,8 +8,8 @@ using BiciEventos.Models;
 namespace BiciEventos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170123010221_AddInvites")]
-    partial class AddInvites
+    [Migration("20170130145414_NoSecurityAgain")]
+    partial class NoSecurityAgain
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

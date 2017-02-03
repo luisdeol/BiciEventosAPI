@@ -20,6 +20,12 @@ namespace BiciEventos.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<User>()
+                .HasKey(u => u.Id);
+
+            builder.Entity<Event>()
+                .HasKey(e => e.Id);
+
             builder.Entity<Attendance>()
                 .HasKey(a => new
                 {
@@ -67,12 +73,6 @@ namespace BiciEventos.Models
                 .WithMany(a => a.Attendances)
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            //builder.Entity<Attendance>()
-            //    .HasOne(a => a.User)
-            //    .WithMany(a => a.Attendances)
-            //    .HasForeignKey(a=> a.UserId)
-            //    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

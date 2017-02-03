@@ -7,18 +7,24 @@ using BiciEventos.Repositories;
 
 namespace BiciEventos.Persistence
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        public EventRepository Events;
+        public IEventRepository Events { get; }
+        public IUserRepository Users { get; }
+        public IAttendanceRepository Attendances { get; }
+        public IInviteRepository Invites { get; }
         private readonly ApplicationDbContext _context;
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Events = new EventRepository(_context);
+            Users = new UserRepository(_context);
+            Attendances = new AttendanceRepository(_context);
+            Invites = new InviteRepository(_context);
         }
 
-        public void IsComplete()
+        public void Complete()
         {
             _context.SaveChanges();
         }

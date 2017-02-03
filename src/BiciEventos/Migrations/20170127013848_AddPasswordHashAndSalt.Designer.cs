@@ -8,8 +8,8 @@ using BiciEventos.Models;
 namespace BiciEventos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170123005001_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20170127013848_AddPasswordHashAndSalt")]
+    partial class AddPasswordHashAndSalt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,14 +64,33 @@ namespace BiciEventos.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("BiciEventos.Models.Invite", b =>
+                {
+                    b.Property<int>("EventId");
+
+                    b.Property<int>("InvitedId");
+
+                    b.Property<int>("InviterId");
+
+                    b.HasKey("EventId", "InvitedId", "InviterId");
+
+                    b.HasIndex("InvitedId");
+
+                    b.HasIndex("InviterId");
+
+                    b.ToTable("Invites");
+                });
+
             modelBuilder.Entity("BiciEventos.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Password");
+                    b.Property<string>("PasswordHash");
 
                     b.Property<DateTime>("RegisterDate");
+
+                    b.Property<byte[]>("Salt");
 
                     b.Property<string>("Username");
 
@@ -98,6 +117,22 @@ namespace BiciEventos.Migrations
                         .WithMany("Events")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BiciEventos.Models.Invite", b =>
+                {
+                    b.HasOne("BiciEventos.Models.Event", "Event")
+                        .WithMany("Invites")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BiciEventos.Models.User", "Invited")
+                        .WithMany("InvitesReceived")
+                        .HasForeignKey("InvitedId");
+
+                    b.HasOne("BiciEventos.Models.User", "Inviter")
+                        .WithMany("InvitesSent")
+                        .HasForeignKey("InviterId");
                 });
         }
     }

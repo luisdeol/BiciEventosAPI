@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BiciEventos.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace BiciEventos.Repositories
 {
-    public class EventRepository : IEventRepository
+    public class EventRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -18,7 +17,7 @@ namespace BiciEventos.Repositories
 
         public List<Event> GetAll()
         {
-            return _context.Events.Include(e=> e.User).ToList();
+            return _context.Events.ToList();
         }
 
         public Event GetEvent(int id)
@@ -33,10 +32,13 @@ namespace BiciEventos.Repositories
 
         public Event Delete(int id)
         {
-            var evento = GetEvent(id);
-            if (evento != null)
+            if (_context.Events.Any(e => e.Id == id))
+            {
+                var evento = _context.Events.SingleOrDefault(e => e.Id == id);
                 _context.Events.Remove(evento);
-            return evento;
+                return evento;
+            }
+            return null;
         }
 
         public void Edit(Event evento)
