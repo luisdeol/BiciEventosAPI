@@ -16,9 +16,9 @@ namespace BiciEventos.Repositories
             _context = context;
         }
 
-        public List<Event> GetAll()
+        public IQueryable<Event> GetAll()
         {
-            return _context.Events.Include(e=> e.User).ToList();
+            return _context.Events.Include(e => e.User);
         }
 
         public Event GetEvent(int id)

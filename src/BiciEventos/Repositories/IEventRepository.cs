@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using BiciEventos.Models;
 
 namespace BiciEventos.Repositories
 {
     public interface IEventRepository
     {
-        List<Event> GetAll();
+        IQueryable<Event> GetAll();
         Event GetEvent(int id);
         void Add(Event evento);
         Event Delete(int id);

@@ -35,12 +35,13 @@ namespace BiciEventos
             //var azureConnectionString =
             //    @"Server=tcp:f40q89jtof.database.windows.net,1433;Initial Catalog=luisdeol;Persist Security Info=False;User ID=catalog;Password=Luisdeol/;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.Formatting = Formatting.Indented;
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
         }
 

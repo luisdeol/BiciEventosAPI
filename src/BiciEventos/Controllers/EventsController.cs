@@ -1,4 +1,6 @@
-﻿using BiciEventos.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BiciEventos.Models;
 using BiciEventos.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +18,9 @@ namespace BiciEventos.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetAll()
+        public IQueryable<Event> GetAll()
         {
-            return new ObjectResult(_unitOfWork.Events.GetAll());
+            return _unitOfWork.Events.GetAll();
         }
 
         [HttpGet("{id}")]
