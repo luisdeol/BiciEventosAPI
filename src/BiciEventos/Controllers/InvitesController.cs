@@ -25,10 +25,9 @@ namespace BiciEventos.Controllers
             return new ObjectResult(_unitOfWork.Invites.GetAll());
         }
 
-        [HttpGet("{id}")]
-        public ActionResult Get(int invitedId, int inviterId, int eventId)
+        public ActionResult Get(Invite inviteObj)
         {
-            var invite = _unitOfWork.Invites.GetInvite(invitedId, inviterId, eventId);
+            var invite = _unitOfWork.Invites.GetInvite(inviteObj.InvitedId, inviteObj.InviterId, inviteObj.EventId);
             if (invite == null)
                 return NotFound();
             return new ObjectResult(invite);
@@ -41,17 +40,17 @@ namespace BiciEventos.Controllers
             _unitOfWork.Complete();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public void Put([FromBody]Invite invite)
         {
             _unitOfWork.Invites.Edit(invite);
             _unitOfWork.Complete();
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int invitedId, int inviterId, int eventId)
+        [HttpDelete]
+        public ActionResult Delete(Invite inviteObj)
         {
-            var toRemoveInvite = _unitOfWork.Invites.Delete(invitedId, inviterId, eventId);
+            var toRemoveInvite = _unitOfWork.Invites.Delete(inviteObj.InvitedId, inviteObj.InviterId, inviteObj.EventId);
             if (toRemoveInvite == null)
                 return NotFound();
             _unitOfWork.Complete();

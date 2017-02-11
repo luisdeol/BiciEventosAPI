@@ -18,7 +18,7 @@ namespace BiciEventos.Repositories
 
         public List<Invite> GetAll()
         {
-            return _context.Invites.ToList();
+            return _context.Invites.Include(i=>i.Event).Include(i=> i.Inviter).ToList();
         }
 
         public Invite GetInvite(int invitedId, int inviterId, int eventId)
