@@ -14,5 +14,7 @@ namespace BiciEventos.Models
         public Event Event { get; set; }
         public User Inviter { get; set; }
         public User Invited { get; set; }
+
+        public bool IsRead { get; set; }
     }
 }
